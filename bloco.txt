@@ -1,0 +1,56 @@
+Aula Parte 1️⃣
+✅ Class-based Views (CBV)
+
+🎯 Objetivo:
+
+    - Organizar as views de forma mais escalável e reutilizável.
+    - Fazer a transição natural entre FBV (function-based views) → que eles já usaram, para CBV → um padrão mais comum em aplicações maiores.
+
+    CBVs oferecem:
+
+    - Mais organização (especialmente para views com vários métodos - GET, POST, PUT, etc.)
+    - Facilidade de extensão e herança → permite criar padrões e reaproveitar código.
+    - Melhor separação de responsabilidades.
+
+    Quando usar CBV?
+
+    - Em views que têm múltiplos comportamentos.
+    - Quando você quer um padrão comum em toda a aplicação.
+    - Quando você quer aproveitar views genéricas que o Django já oferece (ListView, DetailView, CreateView, etc).
+
+🛠️ Atividade hands-on (CBV)
+👉 Façam:
+
+Criar uma nova rota /server-info que retorna:
+    - versão do Python
+    - hostname da máquina (dica: usar platform ou socket module)
+
+Exemplo de resposta esperada:
+{
+  "python_version": "3.11.2",
+  "hostname": "meu-computador"
+}
+
+Aula Parte 2️⃣
+✅ Introdução a Templates HTML
+🎯 Objetivo:
+
+    - Usar o sistema de templates do Django.
+    - Criar uma pasta de templates.
+    - Renderizar páginas HTML dinâmicas.
+
+    1. Templates servem para gerar HTML dinâmico.
+        -  Em vez de responder com JsonResponse, agora você responde com uma página HTML.
+
+    2. Django tem uma engine de templates que suporta:
+        - Variáveis
+        - Loops
+        - Condicionais
+        - Herança de templates
+
+    3. Estrutura típica de pastas:
+        app_name/
+        └── templates/
+            └── app_name/
+                └── arquivo.html
+        → Importante: sempre criar a subpasta com o nome do app → boas práticas.
