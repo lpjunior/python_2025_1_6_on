@@ -1,3 +1,5 @@
+📘 Aula 3 — Introdução a CBF, Model, Templates HTML, ORM
+
 Aula Parte 1️⃣
 ✅ Class-based Views (CBV)
 
@@ -54,3 +56,24 @@ Aula Parte 2️⃣
             └── app_name/
                 └── arquivo.html
         → Importante: sempre criar a subpasta com o nome do app → boas práticas.
+
+
+📘 Aula 4 — Integração com Model + Criação e Exibição de Dados via Views
+
+Aula Parte 1️⃣
+    1. Orientações sobre a utilização do Git/Github
+
+Aula Parte 2️⃣
+🎯 Objetivos da Aula
+    - Consolidar o uso de Models e Migrations
+    - Implementar inserção e listagem de dados via Django ORM
+    - Criar views que exibam dados reais armazenados no banco
+    - Estimular boas práticas de design de dados e lógica de consulta
+
+ORM - (Object-Relational Mapping)
+    - Permite que você interaja com o banco de dados usando código(da linguagem) em vez de SQL.
+
+Migrations
+    - makemigrations - cria o script de alteração
+    - migrate - aplica a alteração no banco
+
