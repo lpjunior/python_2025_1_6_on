@@ -77,3 +77,35 @@ Migrations
     - makemigrations - cria o script de alteração
     - migrate - aplica a alteração no banco
 
+
+📘 Aula 5 — CRUD: Atualização e Remoção de registros
+
+🎯 Objetivos da Aula
+    - Compreender os conceitos de atualização(update) e remoção(delete) de dados em uma aplicação web.
+    - Implementar views para editar e excluir registros de um model.
+    - Trabalhar com rotas dinâmicas baseadas em id.
+    - Reforçar o uso de templates, redirecionamentos e organização do código.
+
+
+Aula Parte 1️⃣
+    1. Explicação, implementação da atualização e hands-on
+
+
+Atividade:
+    Seguindo o modelo(Model) Person, implementem as funcionalidades de cadastro e atualização de pessoas.
+    Na funcionalidade de edição, incluam uma validação antes do envio dos dados, exibindo a seguinte mnesagem de confirmação: "Deseja continuar?".
+
+
+Aula Parte 2️⃣
+    1. Explicação, implementação da exclusão e hands-on
+    2. Refatorar o código usando CBV para views de book e ajuste da rota de book
+
+
+CRUD:
+    Create - insere uma informação na base
+    Retrieve - consulta informação(ões) na base
+    Update - atualiza uma informação
+    Delete - exclui uma informação
+
+
+
