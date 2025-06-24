@@ -108,4 +108,92 @@ CRUD:
     Delete - exclui uma informação
 
 
+rotas book-list x book/list
 
+book-list
+
+- Prós:
+ - curta e direta
+ - usada quando você considera "book-list" como um único recurso
+
+- Contras
+ - Foge um pouco da hierarquia RESTful.
+ - Fica menos modular
+
+book/list
+- Prós
+ - segue estrutura RESTful hierarquica.
+    "book" seria uma categoria
+    "list" o recurso dentro da categoria
+ - Permite expansão futura
+  - book/reserva
+
+
+📘 Aula 6 — Forms: Trabalhando com Django Forms (Formulários dinâmicos e validações)
+
+🎯 Objetivos da Aula
+    - Entender o conceito e funcionamento dos formulários do Django
+    - Substituir formulários HTML manuais por ModelForm (Hands-on)
+    - Beneficios do uso do Django Forms
+        - Menos código e mais segurança
+        - Valida entradas do usuário de forma declarativa
+        - Aprimora a manutenção e reutilização de código em views e templates
+
+Aula Parte 1️⃣
+    1. Revisão da aula passada.
+    2. Explicação, implementação das métodos(verbos) HTTP não suportados nativamente pelo HTML
+
+
+    document.getElementById('book-form').addEventListener('submit', function(e) {}
+
+    - Seleciona o formulário pelo ID 'book-form'. ## document.getElementById('book-form')
+    - Adiciona um 'ouvinte' de evento ao envio ('submit'). ## addEventListener('submit',
+    - Quando o usuário clica em 'Atualizar', a função será executada ## function(e) {
+
+    e.preventDefault();
+
+    - Impede o envio do tradicional do formulário (post)
+    - Permite que o JavaScript tome controle e envie os dados com o fetch.
+
+    const form = e.target;
+    const data = new FormData(form);
+    const jsonData = Object.formEntries(data.entries());
+
+    - e.target é o próprio formulário
+    - FormData(form) cria um objeto com todos os campos do formulário
+    - Object.formEntries(data.entries()) converte o FormData em um objeto literal JavaScript
+    - entries() retorna pare de chaves [chave, valor], e Object.formEntries monta o objeto
+
+    fetch()
+
+    - Envia a requisição HTTP para a URL atual ('window.location.href'), com o método PUT
+
+    method: 'PUT'
+    - Define o método de envio como PUT
+
+    Headers
+
+    'Content-Type': 'application/json': indica que o corpo da requisição será em JSON
+    'X-CSRFToken': {{ csrf_token }}: necessário para o Django validar o token CSFR
+
+    body: JSON.stringify(jsonData)
+
+    - transforma o objeto em text JSON para envio
+
+    .then(res => res.json())
+    .then(data => {
+        alert('Atualizado com sucesso!');
+        window.location.href = "{% url 'book_list' %}";
+    });
+
+    - Espera a resposta do servidor
+    - Converte a resposta em JSON
+    - Mostra um alerta e redireciona para a listagem
+
+
+Aula Parte 2️⃣
+    1. Explicação, implementação do Django forms
+
+    Existe 2 tipos:
+        - forms.Form: formulário genérico sem ligação com o banco de dados
+        - forms.ModelForm: formulário baseado em um Model, cria automaticamente

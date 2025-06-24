@@ -1,11 +1,15 @@
+import json
 import platform
 import socket
 from datetime import datetime
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
 from django.utils.dateparse import parse_date
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
+
+from app.foms import BookForm
 from app.models import Person, Book
 
 
@@ -67,49 +71,21 @@ class BookGetView(DetailView):
     context_object_name = "book"
     pk_url_kwarg = "book_id"
 
-class BookCreateView(View):
-    def get(self, request):
-        return render(request, "app/book_form.html")
+class BookCreateView(CreateView):
+    model = Book
+    form_class = BookForm
+    template_name = "app/book_form.html"
+    success_url = reverse_lazy('book_list')  # redireciona após o cadastro
 
-    def post(self, request):
-        title = request.POST.get("title")
-        author = request.POST.get("author")
-        pages = request.POST.get("pages")
-        published_date = parse_date(request.POST.get("published_date"))
+class BookUpdateView(UpdateView):
+    model = Book
+    form_class = BookForm
+    template_name = "app/book_form.html"
+    pk_url_kwarg = "book_id"
+    success_url = reverse_lazy('book_list')
 
-        # Validação básica
-        if title and author and pages and published_date:
-            Book.objects.create(
-                title=title,
-                author=author,
-                pages=pages,
-                published_date=published_date
-            )
-            return redirect("book-list")
-
-        return render(request, "app/book_form.html")
-
-class BookUpdateView(View):
-    def get(self, request, book_id):
-        book = get_object_or_404(Book, id=book_id)
-        return render(request, "app/book_form.html", {"book": book})
-
-    def post(self, request, book_id):
-        book = get_object_or_404(Book, id=book_id)
-        book.title = request.POST.get("title")
-        book.author = request.POST.get("author")
-        book.pages = request.POST.get("pages")
-        book.published_date = parse_date(request.POST.get("published_date"))
-        book.save()
-
-        return redirect("book-list")
-
-class BookDeleteView(View):
-    def get(self, request, book_id):
-        book = get_object_or_404(Book, id=book_id)
-        return render(request, "app/book_confirm_delete.html", {"book": book})
-
-    def post(self, request, book_id):
-        book = get_object_or_404(Book, id=book_id)
-        book.delete()
-        return redirect("book-list")
+class BookDeleteView(DeleteView):
+    model = Book
+    template_name = "app/book_confirm_delete.html"
+    pk_url_kwarg = "book_id"
+    success_url = reverse_lazy('book_list')
