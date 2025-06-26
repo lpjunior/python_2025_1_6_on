@@ -2,14 +2,15 @@ import json
 import platform
 import socket
 from datetime import datetime
+
 from django.http import JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.utils.dateparse import parse_date
 from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from app.foms import BookForm
+from app.foms import BookForm, ContactForm
+from app.mixins import JsonableResponseMixin
 from app.models import Person, Book
 
 
@@ -77,15 +78,50 @@ class BookCreateView(CreateView):
     template_name = "app/book_form.html"
     success_url = reverse_lazy('book_list')  # redireciona após o cadastro
 
-class BookUpdateView(UpdateView):
+class BookUpdateView(JsonableResponseMixin, UpdateView):
     model = Book
     form_class = BookForm
     template_name = "app/book_form.html"
     pk_url_kwarg = "book_id"
     success_url = reverse_lazy('book_list')
 
+    def put(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        try:
+            body = json.loads(request.body)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'JSON invalid'}, status=400)
+
+        # Monta os kwargs com os dados e instancia
+        kwargs = self.get_form_kwargs()
+        kwargs['data'] = body
+        kwargs['instance'] = self.object
+
+        form = self.get_form(**kwargs)
+
+        if form.is_valid():
+            return self.form_valid(form)
+        return self.form_invalid(form)
+
 class BookDeleteView(DeleteView):
     model = Book
     template_name = "app/book_confirm_delete.html"
     pk_url_kwarg = "book_id"
     success_url = reverse_lazy('book_list')
+
+
+def contact_view(request):
+    form = ContactForm(request.POST or None)
+
+    if form.is_valid():
+
+        name = form.cleaned_data['name']
+        email = form.cleaned_data['email']
+        message = form.cleaned_data['message']
+
+        # Simula envio
+        context = {'success': True, 'name': name }
+
+        return render(request, 'app/contact.html', context)
+    return render(request, 'app/contact.html', {'form': form})

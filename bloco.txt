@@ -143,7 +143,6 @@ Aula Parte 1️⃣
     1. Revisão da aula passada.
     2. Explicação, implementação das métodos(verbos) HTTP não suportados nativamente pelo HTML
 
-
     document.getElementById('book-form').addEventListener('submit', function(e) {}
 
     - Seleciona o formulário pelo ID 'book-form'. ## document.getElementById('book-form')
@@ -197,3 +196,65 @@ Aula Parte 2️⃣
     Existe 2 tipos:
         - forms.Form: formulário genérico sem ligação com o banco de dados
         - forms.ModelForm: formulário baseado em um Model, cria automaticamente
+
+
+📘 Aula 7 — Forms: Aprofundando Django Forms (Validações, personalizações e formulários manuais)
+
+🎯 Objetivos da Aula
+    - Comprrender os conceitos de ModelForm e Form manual
+    - Aplicar validações personalizadas em formulários
+    - Customizar labels, help_texts e widgets nos campos de formulários
+
+Aula Parte 1️⃣
+    1. Revisão da aula passada.
+    2. Validações, personizalizações.
+    3. Explicação sobre os write case (formas de escrita)
+
+Tipos de escrita (write case)
+- Pascal Case (ou Upper Camel Case)
+    Primeira letra maiúscula, novas palavras com a primeira letra maiúscula
+    Usado por linguagens como: Java, C#, Python (para classes), TypeScript
+
+    Usado para: nomear classes, tipos e enums
+
+    Exemplo:
+    - Book
+    - HistoryBook
+    - RelatorioFinanceiro
+
+- Camel Case
+    Primeira letra minúscula, novas palavras com a primeira letra maiúscula
+    Usado por linguagens como: Java, JavaScript, C#, TypeScript
+
+    Usado para: nomear atributos, variáveis e métodos
+
+    Exemplo:
+    - historyBook
+    - Book
+    - relatorioFinanceiro
+
+- Snake Case
+    Palavras separadas por underline, tudo em minúsculo
+    Usado por linguagens como: Python , Ruby
+
+    Usado para: nomear atributos, funções, modulos
+
+    Exemplo:
+    - numero_conta
+    - history_book
+    - published_date
+
+- Constant Case
+    Palavras separadas por underline, tudo em maiúsculo.
+    Usado por linguagens como: Python, C, C++, Java, C#
+
+    Usado para: nomear constantes (valores imutáveis)
+
+    Exemplo:
+    - PI
+    - TAXA_JUROS
+    - LIMITE_MAXIMO
+
+Aula Parte 2️⃣
+    1. hands-on (projeto Gerenciador de tarefas pessoais).
+    2. Form manual.

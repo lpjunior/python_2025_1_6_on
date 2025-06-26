@@ -1,0 +1,15 @@
+🎯 Gerenciador de tarefas pessoais
+
+    O objetivo é permitir que o usuário:
+     - cadastre (post)
+     - lista (get)
+     - edite (patch|put)
+     - exclua (delete)
+     suas tarefas usando uma interface com formulários personalizados (Django Forms) e
+     rotas conectadas a views baseadas em classe (CBV).
+
+    - Campos para tarefa:
+        - Titulo (obrigatório)
+        - Descrição (opcional)
+        - Data da entrega (obrigatório)
+        - Concluída (sim/não)
