@@ -33,8 +33,9 @@
                 fetch(window.location.href, {
                     method: 'PUT',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': '{{ csrf_token }}'
+                          'Content-Type': 'application/json',
+                          'Accept': 'application/json',
+                          'X-CSRFToken': '{{ csrf_token }}'
                     },
                     body: JSON.stringify(jsonData)
                 })

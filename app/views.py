@@ -85,24 +85,27 @@ class BookUpdateView(JsonableResponseMixin, UpdateView):
     pk_url_kwarg = "book_id"
     success_url = reverse_lazy('book_list')
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        if self.request.content_type == 'application/json':
+            try:
+                data = json.loads(self.request.body)
+            except json.JSONDecodeError:
+                data = {}
+            # Substitui 'data' pelo JSON
+            kwargs['data'] = data
+            # Remove 'files' se existir
+            kwargs.pop('files', None)
+        return kwargs
+
     def put(self, request, *args, **kwargs):
         self.object = self.get_object()
-
-        try:
-            body = json.loads(request.body)
-        except json.JSONDecodeError:
-            return JsonResponse({'error': 'JSON invalid'}, status=400)
-
-        # Monta os kwargs com os dados e instancia
-        kwargs = self.get_form_kwargs()
-        kwargs['data'] = body
-        kwargs['instance'] = self.object
-
-        form = self.get_form(**kwargs)
-
+        form = self.get_form()
         if form.is_valid():
             return self.form_valid(form)
         return self.form_invalid(form)
+
+
 
 class BookDeleteView(DeleteView):
     model = Book
