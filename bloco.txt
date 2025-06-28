@@ -258,3 +258,21 @@ Tipos de escrita (write case)
 Aula Parte 2️⃣
     1. hands-on (projeto Gerenciador de tarefas pessoais).
     2. Form manual.
+
+
+📘 Aula 8 - Banco de dados Relacional - parte 1
+
+🎯 Objetivos da Aula
+    - Entender o que é um banco de dados
+    - Entender sobre dados estruturados e não estruturados
+    - Conceito de tabelas, linhas(registros) e colunas(atributos)
+    - Chaves primárias e estrangeiras
+    - Relação entre tabelas 1:1, 1:N e N:N
+    - Migração SQLite para PostgreSQL
+
+Aula Parte 1️⃣
+    1. Entendendo sobre banco de dados
+
+Aula Parte 2️⃣
+    1. hands-on configuração e migração da app para o supabase
+    2. hands-on trabalhando com SQL
