@@ -274,5 +274,48 @@ Aula Parte 1️⃣
     1. Entendendo sobre banco de dados
 
 Aula Parte 2️⃣
-    1. hands-on configuração e migração da app para o supabase
+    1. hands-on configuração e migração da app para o Supabase
     2. hands-on trabalhando com SQL
+
+📘 Aula 9 - Banco de dados Relacional - parte 2
+
+🎯 Objetivos da Aula
+    - Entender sobre as versões do uuid
+    - Consolidar o entendimento de comandos SQL na prática
+    - Relacionar comandos SQL com o uso do ORM do Django
+    - (Introdução) Variáveis de ambiente e arquivos .env
+
+Aula Parte 1️⃣
+    1. Entendendo sobre banco de dados
+
+Aula Parte 2️⃣
+    1. hands-on configuração e migração da app para o Supabase
+    2. hands-on trabalhando com SQL
+
+O módulo uuid suporta cinco versões principais de UUIDs.
+versão | Nome           | Fonte                                                       | Caso de uso
+   1   | Time-based     | Data/hora + MAC do host                                     | Sistemas que precisam de UUIDs ordenáveis pelo tempo. Ex.: Log distribuídos que devem manter a ordem cronológica.
+   2   | DCE Security   | Similar ao v1, com suporte UID/GID                          | Controle de acesso embutido do Unix nos UUIDs
+   3   | Name-based     | Hash MD5 de uma namespace + nome                            | Quando se precisa do mesmo UUID gerado a partir de um nome fixo. (O mesmo input gera sempre o mesmo UUID)
+   4   | Random         | Aleatório (usando um gerador de números aleatórios seguros) | Identificador de transações, objetos, requisições, etc.
+   5   | Name-based     | Hash SHA-1 de um namespace + nome                           | URL, DNS, chaves de cache, etc.(O mesmo input gera sempre o mesmo UUID)
+
+DBA <- configura rotinas de backup
+backup 10h rodou as 15h01m
+
+
+caso de uso: a necessidade do sistema/usuário precisa que seja implementado
+
+3 ambientes
+dev - ambiente do desenvolvedor (testes)
+uat/hml - ambiente de testes do usuário do sistema
+prod - ambiente final onde a aplicação irá estar executando (produção)
+
+De/Para SQL x ORM do Django
+
+            SQL                     |       Django ORM
+SELECT * FROM public.contacts       |   Contact.objects.all()
+WHERE first_name ilike 'Luis'       |   Contact.objects.filter(first_name='Luis')
+INSERT INTO                         |   Contact.objects.create(...)
+UPDATE                              |   c.fist_name = 'Luis Paulo'; c.save()
+DELETE                              |   c.delete()
