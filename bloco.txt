@@ -319,3 +319,17 @@ WHERE first_name ilike 'Luis'       |   Contact.objects.filter(first_name='Luis'
 INSERT INTO                         |   Contact.objects.create(...)
 UPDATE                              |   c.fist_name = 'Luis Paulo'; c.save()
 DELETE                              |   c.delete()
+
+📘 Aula 10 - Envio de e-mail, Upload de arquivos e Deploy no Render - parte 1
+
+🎯 Objetivos da Aula
+    - Configurar envio de e-mails no Django (servidor Gmail)
+    - Implementar upload de arquivos localmente e com serviço remoto (Cloudinary)
+    - Publicar o projeto na nuvem (Render)
+
+Aula Parte 1️⃣
+    1. Envio de e-mail (servidor Gmail)
+
+Aula Parte 2️⃣
+    1. Upload de arquivos e envio do path no email
+    1. Comparativo upload local x remoto

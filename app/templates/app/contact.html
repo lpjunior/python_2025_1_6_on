@@ -9,7 +9,7 @@
         <p>Obrigado, {{ name }}. Sua mensagem foi enviada!</p>
     {% else %}
     <h2>Fale Conosco</h2>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_div }}
         <button type="submit">Enviar</button>

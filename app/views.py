@@ -1,8 +1,11 @@
 import json
 import platform
+import smtplib
 import socket
 from datetime import datetime
 
+from django.core.files.storage import default_storage
+from django.core.mail import EmailMessage
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -105,23 +108,38 @@ class BookUpdateView(JsonableResponseMixin, UpdateView):
             return self.form_valid(form)
         return self.form_invalid(form)
 
-
-
 class BookDeleteView(DeleteView):
     model = Book
     template_name = "app/book_confirm_delete.html"
     pk_url_kwarg = "book_id"
     success_url = reverse_lazy('book_list')
 
-
 def contact_view(request):
-    form = ContactForm(request.POST or None)
+    form = ContactForm(request.POST or None, request.FILES or None)
 
     if form.is_valid():
-
         name = form.cleaned_data['name']
         email = form.cleaned_data['email']
         message = form.cleaned_data['message']
+        file = form.cleaned_data.get('attachment')
+
+        if file:
+            default_storage.save(f'uploads/{file.name}', file)
+
+        smtplib.SMTP.debuglevel = 1
+
+        email_message = EmailMessage(
+            subject=f'Contato de {name}',
+            body=message,
+            from_email=email,
+            to=['aula.sendmail@gmail.com'],
+        )
+
+        if file:
+            content_type = file.content_type
+            email_message.attach(file.name, file.read(), content_type)
+
+        email_message.send()
 
         # Simula envio
         context = {'success': True, 'name': name }
