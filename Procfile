@@ -1,0 +1,1 @@
+web: gunicorn aula03_project.wsgi
