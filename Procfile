@@ -1,1 +1,1 @@
-web: gunicorn aula03_project.wsgi
+web: gunicorn config.wsgi
