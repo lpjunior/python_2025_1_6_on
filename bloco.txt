@@ -324,7 +324,8 @@ DELETE                              |   c.delete()
 
 🎯 Objetivos da Aula
     - Configurar envio de e-mails no Django (servidor Gmail)
-    - Implementar upload de arquivos localmente e com serviço remoto (Cloudinary)
+    - Implementar upload de arquivos localmente
+    - Enviar e-mails com arquivo anexado
     - Publicar o projeto na nuvem (Render)
 
 Aula Parte 1️⃣
@@ -333,3 +334,17 @@ Aula Parte 1️⃣
 Aula Parte 2️⃣
     1. Upload de arquivos e envio do path no email
     1. Comparativo upload local x remoto
+
+
+📘 Aula 11 - Upload de arquivos e Deploy no Render - parte 2
+
+🎯 Objetivos da Aula
+    - Implementar upload com serviço remoto (Cloudinary)
+    - Publicar o projeto na nuvem (Render)
+
+Aula Parte 1️⃣
+    1. Upload de arquivos em serviço remoto
+    2. Publicar projeto na nuvem
+
+Aula Parte 2️⃣
+    1.

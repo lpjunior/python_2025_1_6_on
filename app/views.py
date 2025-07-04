@@ -1,10 +1,13 @@
 import json
+import os.path
 import platform
 import smtplib
 import socket
-from datetime import datetime
+from datetime import datetime, timedelta
 
-from django.core.files.storage import default_storage
+import cloudinary
+import cloudinary.uploader
+from cloudinary.api import resource_types
 from django.core.mail import EmailMessage
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -123,21 +126,27 @@ def contact_view(request):
         message = form.cleaned_data['message']
         file = form.cleaned_data.get('attachment')
 
-        if file:
-            default_storage.save(f'uploads/{file.name}', file)
+        date_suffix = datetime.now().strftime('%Y_%m_%d')
+        filename = f'relatorio_vendas_{date_suffix}'
+
+        upload_result = cloudinary.uploader.upload(
+            file=file,
+            asset_folder='uploads',
+            public_id=filename,
+            override=True,
+            resource_type="raw"
+        )
 
         smtplib.SMTP.debuglevel = 1
 
+        message_body = message + f'\n\nFaça o download em: {upload_result["secure_url"]}'
+
         email_message = EmailMessage(
             subject=f'Contato de {name}',
-            body=message,
+            body=message_body,
             from_email=email,
             to=['aula.sendmail@gmail.com'],
         )
-
-        if file:
-            content_type = file.content_type
-            email_message.attach(file.name, file.read(), content_type)
 
         email_message.send()
 
