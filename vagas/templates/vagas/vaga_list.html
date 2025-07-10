@@ -1,0 +1,20 @@
+{% extends 'vagas/base.html' %}
+{% block title %}Lista de Vagas{% endblock %}
+{% block content %}
+<h2>Vagas Disponíveis</h2>
+<a href="{% url 'vaga-create' %}" class="btn btn-success mb-3">Nova Vaga</a>
+<ul class="list-group">
+    {% for vaga in vagas %}
+    <li class="list-group-item">
+        <strong>{{ vaga.titulo }}</strong> ({{ vaga.nivel|capfirst }}) - {{ vaga.localidade }}
+        <div>
+            <a href="{% url 'vaga-update' vaga.pk %}" class="btn btn-sm btn-warning">Editar</a>
+            <a href="{% url 'vaga-delete' vaga.pk %}" class="btn btn-sm btn-danger">Excluir</a>
+            <a href="{% url 'candidatar' vaga.pk %}" class="btn btn-sm btn-primary">Candidatar-se</a>
+        </div>
+    </li>
+    {% empty %}
+    <li class="list-group-item">Nenhuma vaga disponível</li>
+    {% endfor %}
+</ul>
+{% endblock %}

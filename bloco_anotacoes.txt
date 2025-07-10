@@ -1,0 +1,70 @@
+🎯 Objetivo Geral
+    Desenvolver uma aplicação web com Django que permita o cadastro de empresas e vagas de emprego, bem como o envio de candidaturas por parte de candidatos. A aplicação deve integrar funcionalidades como formulários personalizados, envio de e-mails de confirmação, upload de currículos, autenticação de usuários, uso do ORM com filtros dinâmicos, e deploy em ambiente online.
+
+🧩 Descrição da Aplicação
+
+    Você foi contratado para desenvolver o EmpregaSenac, um sistema web que conecta empresas e candidatos de forma direta. O sistema deve permitir:
+
+    - Cadastro e gerenciamento de vagas por empresas autenticadas.
+    - Visualização pública de vagas e envio de candidaturas com currículo em PDF.
+    - Validação, confirmação e controle via e-mail.
+    - Upload seguro para serviço em nuvem (Cloudinary).
+    - Publicação da aplicação com banco PostgreSQL no Render.
+
+🔧 Funcionalidades Requeridas
+✅ 1. Cadastro e Gerenciamento de Vagas (ModelForm + CBVs)
+    - Rotas protegidas por autenticação (login obrigatório).
+    - CRUD de vagas usando CreateView, UpdateView, DeleteView e ListView.
+    - Vagas devem ter: título, descrição, nível, localidade, salário e empresa.
+
+✅ 2. Visualização e Filtro de Vagas (ORM + Templates)
+    - Página pública com listagem de todas as vagas.
+    - Filtros por nível e localidade via query string.
+
+Ordenação por data ou título, utilizando o ORM.
+
+✅ 3. Envio de Candidaturas (Form Manual + CBV + Upload + E-mail)
+    - Formulário manual para nome, e-mail, vaga e currículo (PDF).
+
+Upload do currículo.
+    - Envio de e-mail ao candidato com confirmação e ao RH com os dados.
+    - Armazenamento da candidatura no banco.
+
+✅ 4. Autenticação
+    - Cadastro e login de empresas.
+    - Restrições de acesso: somente empresas autenticadas podem criar/editar vagas.
+    - Visualização das candidaturas acessível somente a usuários autenticados.
+
+✅ 5. Templates e Interface
+    - Templates baseados em Bootstrap.
+    - Feedback visual via messages (ex: “vaga criada com sucesso”).
+
+✅ 6. Deploy
+    - Hospedagem da aplicação no Render com link público.
+    - Uso de .env para variáveis sensíveis.
+    - Banco PostgreSQL (Supabase).
+
+
+🌟 Funcionalidades Estendidas (Desafio Opcional)
+    - Testes Unitários:
+    - Testar ao menos uma view, uma model e um formulário.
+    - Pode usar unittest ou pytest-django.
+
+Melhorias visuais e funcionais:
+    - Paginação das vagas
+    - Busca por palavra-chave
+    - Responsividade aprimorada
+
+Documentação do Código:
+    - README explicando o projeto e como rodar
+    - Comentários nos trechos críticos do código
+
+---
+
+Novidades:
+
+ - Herança entre templates
+ - Composição de arquivos urls.py
+ - Iniciamos a autenticação (página de login)
+ - Dicionario de dados (NIVEIS)
+

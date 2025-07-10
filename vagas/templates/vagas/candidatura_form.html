@@ -1,0 +1,12 @@
+{% extends 'vagas/base.html' %}
+{% block title %}Candidatar-se{% endblock %}
+{% block content %}
+<h2>Candidatura</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_div }}
+
+    <button type="submit" class="btn btn-primary">Enviar Candidatura</button>
+    <a href="{%url 'vaga-list' %}" class="btn btn-secondary">Voltar</a>
+</form>
+{% endblock %}
