@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 NIVEIS = (
@@ -29,3 +30,20 @@ class Candidatura(models.Model):
 
     def __str__(self):
         return f"{self.nome} - {self.vaga}"
+
+class Candidato(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    nome = models.CharField(max_length=100)
+    telefone = models.CharField(max_length=20)
+    cidade = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.user.username
+
+class Empresa(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    nome_empresa = models.CharField(max_length=200)
+    cnpj = models.CharField(max_length=18)
+
+    def __str__(self):
+        return self.nome_empresa
