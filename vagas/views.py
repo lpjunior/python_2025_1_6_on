@@ -1,7 +1,7 @@
 from datetime import datetime
 
 import cloudinary.uploader
-from django.contrib.auth import login, logout
+from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
@@ -10,6 +10,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, View, TemplateView
 
 from vagas.forms import VagaForm, CandidaturaForm, CandidatoSignUpForm, EmpresaSignUpForm
+from .mixins import EmpresaRequiredMixin
 from .models import Vaga, Candidatura, Candidato, Empresa
 
 
@@ -18,19 +19,29 @@ class VagaListView(ListView):
     template_name = 'vagas/vaga_list.html'
     context_object_name = 'vagas'
 
-class VagaCreateView(LoginRequiredMixin, CreateView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_empresa'] = Empresa.objects.filter(user=self.request.user).exists()
+        return context
+
+class VagaCreateView(LoginRequiredMixin, EmpresaRequiredMixin, CreateView):
     model = Vaga
     form_class = VagaForm
     template_name = 'vagas/vaga_form.html'
     success_url = reverse_lazy('vaga-list')
 
-class VagaUpdateView(LoginRequiredMixin, UpdateView):
+    def form_valid(self, form):
+        # Associa automaticamente a vaga à empresa logada
+        form.instance.empresa = self.request.empresa_logada
+        return super().form_valid(form)
+
+class VagaUpdateView(LoginRequiredMixin, EmpresaRequiredMixin, UpdateView):
     model = Vaga
     form_class = VagaForm
     template_name = 'vagas/vaga_form.html'
     success_url = reverse_lazy('vaga-list')
 
-class VagaDeleteView(LoginRequiredMixin, DeleteView):
+class VagaDeleteView(LoginRequiredMixin, EmpresaRequiredMixin, DeleteView):
     model = Vaga
     template_name = 'vagas/vaga_confirm_delete.html'
     success_url = reverse_lazy('vaga-list')

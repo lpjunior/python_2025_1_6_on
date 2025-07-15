@@ -7,7 +7,13 @@ from .models import Vaga
 class VagaForm(forms.ModelForm):
     class Meta:
         model = Vaga
-        fields = [ 'titulo', 'descricao', 'nivel', 'localidade', 'salario' ]
+        fields = [ 'titulo', 'nivel', 'localidade', 'salario', 'descricao' ]
+        labels = {
+            'titulo' : 'Título',
+            'nivel' : 'Nível',
+            'salario' : 'Salário',
+            'descricao' : 'Descrição',
+        }
 
 class CandidaturaForm(forms.Form):
     nome = forms.CharField(max_length=100)
@@ -27,7 +33,7 @@ class CandidatoSignUpForm(UserCreationForm):
 class EmpresaSignUpForm(UserCreationForm):
     nome_empresa = forms.CharField(max_length=200)
     cnpj = forms.CharField(max_length=18)
-    
+
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']

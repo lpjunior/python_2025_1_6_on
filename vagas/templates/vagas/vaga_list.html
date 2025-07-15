@@ -2,14 +2,16 @@
 {% block title %}Lista de Vagas{% endblock %}
 {% block content %}
 <h2>Vagas Disponíveis</h2>
+{% if is_empresa %}
 <a href="{% url 'vaga-create' %}" class="btn btn-success mb-3">Nova Vaga</a>
+{% endif %}
 <ul class="list-group">
     {% for vaga in vagas %}
     <li class="list-group-item">
         <strong>{{ vaga.titulo }}</strong> ({{ vaga.nivel|capfirst }}) - {{ vaga.localidade }}
         <div>
             <a href="{% url 'vaga-update' vaga.pk %}" class="btn btn-sm btn-warning">Editar</a>
-            <a href="{% url 'vaga-delete' vaga.pk %}" class="btn btn-sm btn-danger">Excluir</a>
+            <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalExcluir" data-id="{{ vaga.pk }}" data-titulo="{{ vaga.titulo }}">Excluir</a>
             <a href="{% url 'candidatar' vaga.pk %}" class="btn btn-sm btn-primary">Candidatar-se</a>
         </div>
     </li>
@@ -17,4 +19,41 @@
     <li class="list-group-item">Nenhuma vaga disponível</li>
     {% endfor %}
 </ul>
+
+<!-- Modal -->
+<div class="modal fade" id="modalExcluir" tabindex="-1" aria-labelledby="modalExcluirLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+    <form method="post" id="formExclusao">
+      {% csrf_token %}
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modalExcluirLabel">Confirmar Exclusão</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Tem certeza que deseja excluir a vaga <strong id="vagaTitulo"></strong>?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-danger">Confirmar</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+<script>
+    const modalExcluir = document.getElementById('modalExcluir');
+    const vagaTitulo = document.getElementById('vagaTitulo');
+    const formExclusao = document.getElementById('formExclusao');
+
+    modalExcluir.addEventListener('shown.bs.modal', function(event) {
+        const botaoExcluir = event.relatedTarget;
+        const vagaId = botaoExcluir.getAttribute('data-id');
+        const titulo = botaoExcluir.getAttribute('data-titulo');
+
+        vagaTitulo.textContent = titulo;
+        formExclusao.action = `/vagas/${vagaId}/excluir/`;
+    });
+</script>
 {% endblock %}
