@@ -10,7 +10,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, View, TemplateView
 
 from vagas.forms import VagaForm, CandidaturaForm, CandidatoSignUpForm, EmpresaSignUpForm
-from .mixins import EmpresaRequiredMixin
+from .mixins import EmpresaRequiredMixin, VagaOwnerRequiredMixin, CandidatoRequiredMixin
 from .models import Vaga, Candidatura, Candidato, Empresa
 
 
@@ -21,7 +21,10 @@ class VagaListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['is_empresa'] = Empresa.objects.filter(user=self.request.user).exists()
+        context['is_empresa'] = (
+            Empresa.objects.filter(user=self.request.user).exists()
+            if self.request.user.is_authenticated else False
+        )
         return context
 
 class VagaCreateView(LoginRequiredMixin, EmpresaRequiredMixin, CreateView):
@@ -35,18 +38,18 @@ class VagaCreateView(LoginRequiredMixin, EmpresaRequiredMixin, CreateView):
         form.instance.empresa = self.request.empresa_logada
         return super().form_valid(form)
 
-class VagaUpdateView(LoginRequiredMixin, EmpresaRequiredMixin, UpdateView):
+class VagaUpdateView(LoginRequiredMixin, EmpresaRequiredMixin, VagaOwnerRequiredMixin, UpdateView):
     model = Vaga
     form_class = VagaForm
     template_name = 'vagas/vaga_form.html'
     success_url = reverse_lazy('vaga-list')
 
-class VagaDeleteView(LoginRequiredMixin, EmpresaRequiredMixin, DeleteView):
+class VagaDeleteView(LoginRequiredMixin, EmpresaRequiredMixin, VagaOwnerRequiredMixin, DeleteView):
     model = Vaga
     template_name = 'vagas/vaga_confirm_delete.html'
     success_url = reverse_lazy('vaga-list')
 
-class CandidaturaCreateView(LoginRequiredMixin, View):
+class CandidaturaCreateView(LoginRequiredMixin, CandidatoRequiredMixin, View):
     def get(self, request, vaga_id):
         form = CandidaturaForm()
         return render(request, 'vagas/candidatura_form.html', {'form': form})

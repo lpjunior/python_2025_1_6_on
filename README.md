@@ -1,3 +1,5 @@
+![Coverage](https://img.shields.io/badge/coverage-81%25-brightgreen)
+
 # 🧑‍💼 EmpregaSenac
 
 Sistema web desenvolvido com Django para gestão de **vagas de emprego**. Conecta **empresas** que desejam divulgar oportunidades a **candidatos** em busca de colocação no mercado.
@@ -158,13 +160,85 @@ SECRET_KEY=your-secret-key
 * Empresas visualizarem candidaturas recebidas.
 * Paginação e busca de vagas.
 * Painel administrativo personalizado.
-* Testes automatizados (`tests.py`).
+
+---
+
+## 🧪 Testes e Cobertura
+
+Este projeto utiliza `pytest` com `pytest-django` e `coverage` para testes automatizados.
+
+### ▶️ Executar testes localmente
+
+**No terminal:**
+
+```bash
+pytest
+````
+
+**Com cobertura de código:**
+
+```bash
+pytest --cov=. --cov-report=term-missing --cov-report=html
+```
+
+**Abrir relatório HTML:**
+
+```bash
+start htmlcov/index.html  # Windows
+# ou
+xdg-open htmlcov/index.html  # Linux
+```
+
+### ▶️ Script automatizado (Windows)
+
+Execute com duplo clique ou no terminal:
+
+```bash
+run_tests.bat
+```
+
+### ✅ Testes Cobrem:
+
+* Candidatura (restrição por perfil)
+* Redirecionamentos de segurança
+
+---
+
+## 🛡️ Badge de cobertura (opcional)
+
+Se você configurar o `codecov.io` ou `coveralls.io`, pode adicionar este badge no topo do `README.md`:
+
+```markdown
+![Coverage](https://img.shields.io/badge/coverage-81%25-brightgreen)
+```
+
+---
+
+```
+
+---
+
+## ✅ 2. Criar o workflow no projeto GitHub
+
+1. Crie o caminho e arquivo:
+```
+
+.github/workflows/tests.yml
+
+````
+
+2. Cole o conteúdo YAML da seção acima.
+
+3. Suba com `git`:
+
+```bash
+git add .github/workflows/tests.yml README.md
+git commit -m "Adiciona testes automatizados e cobertura com GitHub Actions"
+git push origin main
+````
 
 ---
 
 ## 📄 Licença
 
 Este projeto é de uso educacional para o curso de **Programação em Python no SENAC**.
-
----
-
