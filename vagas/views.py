@@ -5,6 +5,7 @@ from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, View, TemplateView
@@ -19,12 +20,40 @@ class VagaListView(ListView):
     template_name = 'vagas/vaga_list.html'
     context_object_name = 'vagas'
 
+    def get_paginate_by(self, queryset):
+        try:
+            return int(self.request.GET.get('por_pagina', 10))
+        except (TypeError, ValueError):
+            return 10
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        user = self.request.user
+        qs = Vaga.objects.all().order_by('-criada_em')
+
+        if user.is_authenticated and Empresa.objects.filter(user=user).exists():
+            qs = qs.filter(empresa__user=user)
+
+        if query:
+           qs = qs.filter(
+                Q(titulo__icontains=query) |
+                Q(descricao__icontains=query) |
+                Q(localidade__icontains=query)
+           )
+
+        return qs
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['is_empresa'] = (
-            Empresa.objects.filter(user=self.request.user).exists()
-            if self.request.user.is_authenticated else False
-        )
+
+        is_authenticated = self.request.user.is_authenticated
+
+        context['is_empresa'] = Empresa.objects.filter(user=self.request.user).exists() if is_authenticated else False
+        context['is_candidato'] = Candidato.objects.filter(user=self.request.user).exists() if is_authenticated else False
+        context['por_pagina'] = self.request.GET.get('por_pagina', 10)
+        context['opcoes_por_pagina'] = ['5', '10', '20', '50', '100']
+        context['query'] = self.request.GET.get('q', '')
+
         return context
 
 class VagaCreateView(LoginRequiredMixin, EmpresaRequiredMixin, CreateView):

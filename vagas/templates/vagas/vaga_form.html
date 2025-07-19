@@ -3,17 +3,18 @@
 {% block title %}Gerenciar Vaga{% endblock %}
 {% block content %}
 <h2>{% if form.instance.pk %}Editar Vaga{% else %}Nova Vaga{% endif %}</h2>
-<form method="post">
-    <div class="row">
-      {% csrf_token %}
-      {% for field in form %}
-      <div class="col-md-6 mb-3">
-          <label class="form-label">{{ field.label }}</label>
-          {{ field|add_class:"form-control" }}
-          {{ field.errors }}
-      </div>
-      {% endfor %}
+
+<form method="post" class="shadow p-4 bg-white rounded" enctype="multipart/form-data">
+  {% csrf_token %}
+  {% for field in form %}
+    <div class="mb-3">
+      <label class="form-label">{{ field.label }}</label>
+      {{ field|add_class:"form-control" }}
+      {{ field.errors }}
     </div>
-    <button type="submit" class="btn btn-primary">Salvar</button>
+  {% endfor %}
+  <button type="submit" class="btn btn-primary">Salvar</button>
+  <a href="{% url 'vaga-list' %}" class="btn btn-secondary">Cancelar</a>
 </form>
+
 {% endblock %}

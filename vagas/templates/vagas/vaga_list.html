@@ -1,26 +1,147 @@
 {% extends 'vagas/base.html' %}
 {% block title %}Lista de Vagas{% endblock %}
-{% block content %}
-<h2>Vagas Disponíveis</h2>
-{% if is_empresa %}
-<a href="{% url 'vaga-create' %}" class="btn btn-success mb-3">Nova Vaga</a>
-{% endif %}
-<ul class="list-group">
-    {% for vaga in vagas %}
-    <li class="list-group-item">
-        <strong>{{ vaga.titulo }}</strong> ({{ vaga.nivel|capfirst }}) - {{ vaga.localidade }}
-        <div>
-            <a href="{% url 'vaga-update' vaga.pk %}" class="btn btn-sm btn-warning">Editar</a>
-            <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalExcluir" data-id="{{ vaga.pk }}" data-titulo="{{ vaga.titulo }}">Excluir</a>
-            <a href="{% url 'candidatar' vaga.pk %}" class="btn btn-sm btn-primary">Candidatar-se</a>
-        </div>
-    </li>
-    {% empty %}
-    <li class="list-group-item">Nenhuma vaga disponível</li>
-    {% endfor %}
-</ul>
 
-<!-- Modal -->
+{% block content %}
+<style>
+  html, body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .page-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+
+  .header-fixed, .footer-fixed {
+    flex-shrink: 0;
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-bottom: 1px solid #dee2e6;
+    z-index: 1020;
+  }
+
+  .footer-fixed {
+    border-top: 1px solid #dee2e6;
+  }
+
+  .main-scroll {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    background-color: #fff;
+  }
+
+  .vaga-card {
+    min-height: 100px;
+  }
+</style>
+
+<div class="page-container">
+
+  <!-- HEADER FIXO -->
+  <header class="header-fixed shadow-sm position-sticky top-0">
+    <div class="container-fluid d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <h4 class="mb-0">Vagas Disponíveis</h4>
+
+      <form method="get" class="mb-4 position-relative" id="formBusca" style="max-width: 400px;">
+        <div class="input-group">
+          <input type="text" name="q" id="inputBusca" class="form-control pe-5" placeholder="Buscar vagas" value="{{ query }}">
+          <input type="hidden" name="por_pagina" value="{{ por_pagina }}">
+
+          {% if query %}
+            <button type="button" class="btn position-absolute end-0 top-0 mt-1 me-2 p-0 border-0 bg-transparent"
+                    style="z-index: 5;" id="btnLimpar" title="Limpar busca">
+              <i class="bi bi-x-circle text-secondary fs-5"></i>
+            </button>
+          {% endif %}
+        </div>
+      </form>
+
+
+      {% if is_empresa %}
+        <a href="{% url 'vaga-create' %}" class="btn btn-success">+ Nova Vaga</a>
+      {% endif %}
+    </div>
+  </header>
+
+  <!-- CONTEÚDO COM SCROLL -->
+  <main class="main-scroll">
+    <div class="container-fluid">
+      <div class="row g-3">
+        {% for vaga in vagas %}
+          <div class="col-12">
+            <div class="card vaga-card shadow-sm">
+              <div class="card-body">
+                <h5 class="card-title mb-1">{{ vaga.titulo }} <span class="text-muted">({{ vaga.nivel|capfirst }})</span></h5>
+                <p class="card-text mb-2"><i class="bi bi-geo-alt-fill"></i> {{ vaga.localidade }}</p>
+
+                <div class="d-flex justify-content-end gap-2">
+                  {% if is_empresa %}
+                    <a href="{% url 'vaga-update' vaga.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalExcluir"
+                            data-id="{{ vaga.pk }}" data-titulo="{{ vaga.titulo }}">
+                      Excluir
+                    </button>
+                  {% else %}
+                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalCandidatura"
+                            data-id="{{ vaga.pk }}" data-titulo="{{ vaga.titulo }}">
+                      Candidatar-se
+                    </button>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        {% empty %}
+          <p class="text-muted text-center">Nenhuma vaga disponível.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER FIXO -->
+  <footer class="footer-fixed shadow-sm position-sticky bottom-0">
+    <div class="container-fluid d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+      {% if is_paginated %}
+        <nav>
+          <ul class="pagination mb-0">
+            {% if page_obj.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?q={{ query }}&por_pagina={{ por_pagina }}&page={{ page_obj.previous_page_number }}">Anterior</a>
+              </li>
+            {% endif %}
+            <li class="page-item disabled">
+              <span class="page-link">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+            </li>
+            {% if page_obj.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?q={{ query }}&por_pagina={{ por_pagina }}&page={{ page_obj.next_page_number }}">Próxima</a>
+              </li>
+            {% endif %}
+          </ul>
+        </nav>
+      {% endif %}
+
+      <form method="get" class="d-flex align-items-center">
+        {% if query %}
+          <input type="hidden" name="q" value="{{ query }}">
+        {% endif %}
+        <label for="por_pagina" class="me-2 mb-0">Itens por página:</label>
+        <select name="por_pagina" id="por_pagina" class="form-select form-select-sm w-auto" onchange="this.form.submit()">
+          {% for n in opcoes_por_pagina %}
+            <option value="{{ n }}" {% if por_pagina == n %}selected{% endif %}>{{ n }}</option>
+          {% endfor %}
+        </select>
+      </form>
+
+    </div>
+  </footer>
+</div>
+
+<!-- MODAIS EXCLUSÃO, CANDIDATURA -->
 <div class="modal fade" id="modalExcluir" tabindex="-1" aria-labelledby="modalExcluirLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -42,7 +163,43 @@
   </div>
 </div>
 
+<div class="modal fade" id="modalCandidatura" tabindex="-1" aria-labelledby="modalCandidaturaLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="modalCandidaturaLabel">Candidatar-se à Vaga</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+            <form enctype="multipart/form-data" id="formCandidatar" method="post">
+                <div class="row">
+                    {% csrf_token %}
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Nome</label>
+                        <input type="text" name="nome" maxlength="100" class="form-control" required="" id="id_nome">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" maxlength="320" class="form-control" required="" id="id_email">
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">Curriculo</label>
+                        <input type="file" name="curriculo" class="form-control" required="" id="id_curriculo">
+                    </div>
+                </div>
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary">Enviar Candidatura</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+  </div>
+</div>
+
 <script>
+    // modalExluir
     const modalExcluir = document.getElementById('modalExcluir');
     const vagaTitulo = document.getElementById('vagaTitulo');
     const formExclusao = document.getElementById('formExclusao');
@@ -52,8 +209,30 @@
         const vagaId = botaoExcluir.getAttribute('data-id');
         const titulo = botaoExcluir.getAttribute('data-titulo');
 
-        vagaTitulo.textContent = titulo;
+        vagaTitulo.textContent += titulo;
         formExclusao.action = `/vagas/${vagaId}/excluir/`;
     });
+
+    // modalCandidatura
+    const modalCandidatura = document.getElementById('modalCandidatura');
+    const vagaCandidaturaTitulo = document.getElementById('modalCandidaturaLabel');
+    const formCandidatar = document.getElementById('formCandidatar');
+
+    modalCandidatura.addEventListener('shown.bs.modal', function(event) {
+        const botaoCandidatura = event.relatedTarget;
+        const vagaId = botaoCandidatura.getAttribute('data-id');
+        const titulo = botaoCandidatura.getAttribute('data-titulo');
+
+        vagaCandidaturaTitulo.textContent += ` - ${titulo}`;
+        formCandidatar.action = `/candidatar/${vagaId}/`;
+    });
+
+  // botão de limpeza do input de consulta
+  document.getElementById('btnLimpar')?.addEventListener('click', function () {
+    const input = document.getElementById('inputBusca');
+    input.value = '';
+    document.getElementById('formBusca').submit();
+  });
 </script>
+
 {% endblock %}
