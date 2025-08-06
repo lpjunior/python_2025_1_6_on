@@ -87,24 +87,30 @@ class CandidaturaCreateView(LoginRequiredMixin, CandidatoRequiredMixin, View):
         form = CandidaturaForm(request.POST, request.FILES)
         vaga = get_object_or_404(Vaga, id=vaga_id)
         if form.is_valid():
+            curriculo_file = form.cleaned_data.get('curriculo')
+
+            # Gera o nome do arquivo
+            date_prefix = datetime.now().strftime('%Y_%m_%d')
+            filename = f'{date_prefix}_curriculo_{form.cleaned_data.get('nome')}'
+
+            # Upload no Cloudinary
+            upload_result = cloudinary.uploader.upload(
+                file=curriculo_file,
+                asset_folder='curriculos',
+                public_id=filename,
+                override=True,
+                resource_type="auto"
+            )
+
+            # Salva no banco
             Candidatura.objects.create(
                 vaga=vaga,
                 nome=form.cleaned_data.get('nome'),
                 email=form.cleaned_data.get('email'),
-                curriculo=form.cleaned_data.get('curriculo'),
+                curriculo=upload_result.get('secure_url'),
             )
 
-            date_prefix = datetime.now().strftime('%Y_%m_%d')
-            filename = f'{date_prefix}_curriculo_{form.cleaned_data.get('nome')}'
-
-            cloudinary.uploader.upload(
-                file=form.cleaned_data.get('curriculo'),
-                asset_folder='curriculos',
-                public_id=filename,
-                override=True,
-                resource_type="raw"
-            )
-
+            # Envia email
             send_mail(
                 subject='Confirmação de candidatura',
                 message=f'Olá {form.cleaned_data.get('nome')}, sua candidatura foi recebida!',
@@ -116,6 +122,16 @@ class CandidaturaCreateView(LoginRequiredMixin, CandidatoRequiredMixin, View):
             return redirect('vaga-list')
         return render(request, 'vagas/candidatura_form.html', {'form': form})
 
+class CandidaturasRecebidasView(LoginRequiredMixin, EmpresaRequiredMixin, ListView):
+    model = Candidatura
+    template_name = 'vagas/candidaturas_recebidas.html'
+    context_object_name = 'candidaturas'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Candidatura.objects.filter(
+            vaga__empresa=self.request.empresa_logada
+        ).select_related('vaga').order_by('-data_envio')
 
 class CandidatoSignUpView(CreateView):
     model = User

@@ -1,0 +1,50 @@
+{% extends 'vagas/base.html' %}
+{% load widget_tweaks %}
+{% block title %}Lista de Candidaturas Recebidas{% endblock %}
+{% block content %}
+    <h2>Candidaturas Recebidas</h2>
+    {% if candidaturas %}
+      <div class="table-responsive">
+          <table class="table table-striped table-bordered align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Vaga</th>
+                    <th>Data</th>
+                    <th>Currículo</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for candidatura in candidaturas %}
+                <tr>
+                    <td>{{ candidatura.nome }}</td>
+                    <td>{{ candidatura.email }}</td>
+                    <td>{{ candidatura.vaga.titulo }}</td>
+                    <td>{{ candidatura.data_envio|date:"d/m/Y H:i" }}</td>
+                    <td><a href="{{ candidatura.curriculo }}" class="btn btn-sm btn-outline-primary" target="_blank">Visualizar</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+      </div>
+
+      {% if is_paginated %}
+          <nav class="mt-4">
+              <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                  <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a></li>
+                {% endif %}
+                  <li class="page-item disabled"><span class="page-link">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span></li>
+                {% if page_obj.has_next %}
+                  <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Próxima</a></li>
+                {% endif %}
+              </ul>
+          </nav>
+      {% endif %}
+    {% else %}
+        <p class="text-muted text-center">Nenhuma candidatura recebida ainda.</p>
+    {% endif %}
+{% endblock %}
+
+

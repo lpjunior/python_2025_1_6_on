@@ -9,6 +9,7 @@ urlpatterns = [
     path('vagas/<int:pk>/editar/', views.VagaUpdateView.as_view(), name='vaga-update'),
     path('vagas/<int:pk>/excluir/', views.VagaDeleteView.as_view(), name='vaga-delete'),
     path('candidatar/<int:vaga_id>/', views.CandidaturaCreateView.as_view(), name='candidatar'),
+    path('candidaturas/recebidas/', views.CandidaturasRecebidasView.as_view(), name='candidaturas-recebidas'),
 ]
 
 from .views import CandidatoSignUpView, EmpresaSignUpView
