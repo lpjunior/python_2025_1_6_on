@@ -1,0 +1,9 @@
+{% extends 'vagas/base.html' %}
+{% block title %}Painel do Candidato{% endblock %}
+{% block content %}
+<h2>Bem-vindo, {{ candidato.nome }}</h2>
+
+<p class="lead">Você está pronto para encontrar a sua próxima oportunidade!</p>
+
+<a href="{% url 'vaga-list' %}" class="btn btn-primary">Ver Vagas Disponíveis</a>
+{% endblock %}

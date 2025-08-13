@@ -1,0 +1,29 @@
+{% extends 'vagas/base.html' %}
+{% block title %}Painel da Empresa{% endblock %}
+{% block content %}
+<h2>Painel da Empresa</h2>
+
+<div class="row g-3">
+  <div class="col-md-6">
+    <div class="card text-bg-primary">
+      <div class="card-body">
+        <h5 class="card-title">Total de Vagas</h5>
+        <p class="display-6">{{ total_vagas }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card text-bg-success">
+      <div class="card-body">
+        <h5 class="card-title">Total de Candidaturas</h5>
+        <p class="display-6">{{ total_candidaturas }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mt-4">
+  <a href="{% url 'vaga-list' %}" class="btn btn-outline-primary">Gerenciar Vagas</a>
+  <a href="{% url 'candidaturas-recebidas' %}" class="btn btn-outline-secondary">Candidaturas Recebidas</a>
+</div>
+{% endblock %}

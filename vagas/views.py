@@ -168,3 +168,30 @@ class EmpresaSignUpView(CreateView):
 
 class HomeView(TemplateView):
     template_name = 'vagas/home.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            if Empresa.objects.filter(user=request.user).exists():
+                return redirect('dashboard-empresa')
+            elif Candidato.objects.filter(user=request.user).exists():
+                return redirect('dashboard-candidato')
+        return super().dispatch(request, *args, **kwargs)
+
+class DashboardEmpresaView(LoginRequiredMixin, EmpresaRequiredMixin, TemplateView):
+    template_name = 'vagas/dashboard_empresa.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        empresa = self.request.empresa_logada
+        context['total_vagas'] = Vaga.objects.filter(empresa=empresa).count()
+        context['total_candidaturas'] = Candidatura.objects.filter(vaga__empresa=empresa).count()
+        return context
+
+class DashboardCandidatoView(LoginRequiredMixin, CandidatoRequiredMixin, TemplateView):
+    template_name = 'vagas/dashboard_candidato.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        candidato = Candidato.objects.filter(user=self.request.user).first()
+        context['candidato'] = candidato
+        return context

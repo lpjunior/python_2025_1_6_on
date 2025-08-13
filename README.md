@@ -153,16 +153,6 @@ SECRET_KEY=your-secret-key
 
 7. Acesse: [http://localhost:8000](http://localhost:8000)
 
----
-
-## ✅ Melhorias Futuras
-
-* Empresas visualizarem candidaturas recebidas.
-* Paginação e busca de vagas.
-* Painel administrativo personalizado.
-
----
-
 ## 🧪 Testes e Cobertura
 
 Este projeto utiliza `pytest` com `pytest-django` e `coverage` para testes automatizados.

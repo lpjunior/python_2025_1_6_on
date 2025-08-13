@@ -1,16 +1,15 @@
 {% extends 'vagas/base.html' %}
-{% load widget_tweaks %}
-{% block title %}Lista de Vagas{% endblock %}
+{% block title %}Bem-Vindo ao EmpregaSenac{% endblock %}
 {% block content %}
-    <h2>Home</h2>
-    {% if messages %}
-      {% for message in messages %}
-        <div class="alert alert-{%if 'error' in message.tags %}danger{% else %}success{% endif %} alert-dismissible fade show" role="alert">
-          {{ message }}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div class="text-center">
+        <h2>Bem-vindo ao EmpregaSenac</h2>
+        <p class="lead">Encontre oportunidades ou cadastre vagas com facilidade.</p>
+        <div class="mt-4 d-flex justify-content-center gap-3 flex-wrap">
+            <a href="{% url 'login' %}" class="btn btn-primary btg-lg">Entrar</a>
+            <a href="{% url 'signup_candidato' %}" class="btn btn-outline-primary btg-lg">Sou Candidato</a>
+            <a href="{% url 'signup_empresa' %}" class="btn btn-outline-secondary btg-lg">Sou Empresa</a>
         </div>
-      {% endfor %}
-    {% endif %}
+    </div>
 {% endblock %}
 
 
